@@ -18,7 +18,7 @@ contract MemeOrNot {
 
     uint256 public marketCount;
     mapping(uint256 => Market) public markets;
-    uint256 public voteCost = 0.001 ether; // Cost per vote
+    uint256 public voteCost = 0.0001 ether; // Cost per vote
     uint256 public creatorRewardPercentage = 5; // 5% reward to the market creator
 
     event MarketCreated(
