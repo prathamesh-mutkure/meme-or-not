@@ -87,7 +87,7 @@ const MemeCreator: React.FC = () => {
   }, [stage, capturedImage]);
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-4">
+    <div className="h-[90vh] bg-gray-900 text-white p-4">
       <AnimatePresence>
         {isLoading && <LoadingOverlay message={loadingMessage} />}
       </AnimatePresence>

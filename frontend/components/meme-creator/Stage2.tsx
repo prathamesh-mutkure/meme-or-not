@@ -4,10 +4,10 @@ import { TextBox } from "./types";
 import { DraggableText } from "./DraggableText";
 import { TextControl } from "./TextControl";
 import { generateMemeCanvas } from "./helper";
-import { createMeme, uploadImage } from "@/lib/utils";
-import { MemeSchema } from "@/true-network/schema";
-import { TrueApi } from "@truenetworkio/sdk";
-import { useAccount } from "wagmi";
+// import { createMeme, uploadImage } from "@/lib/utils";
+// import { MemeSchema } from "@/true-network/schema";
+// import { TrueApi } from "@truenetworkio/sdk";
+// import { useAccount } from "wagmi";
 
 interface Stage2Props {
   capturedImage: string | null;
@@ -18,7 +18,7 @@ interface Stage2Props {
   setStage: (stage: number) => void;
   setIsLoading: (loading: boolean) => void;
   setLoadingMessage: (message: string) => void;
-  trueApi?: TrueApi;
+  // trueApi?: TrueApi;
   memeTemplate: number;
 }
 
@@ -31,7 +31,7 @@ const Stage2: React.FC<Stage2Props> = ({
   setStage,
   setIsLoading,
   setLoadingMessage,
-  trueApi,
+  // trueApi,
   memeTemplate,
 }) => {
   const addTextBox = () => {
@@ -45,58 +45,58 @@ const Stage2: React.FC<Stage2Props> = ({
     setTextBoxes((prev) => [...prev, newBox]);
   };
 
-  const account = useAccount();
+  // const account = useAccount();
 
-  const generateMeme = async () => {
-    if (!imageContainerRef.current || !capturedImage) return;
+  // const generateMeme = async () => {
+  //   if (!imageContainerRef.current || !capturedImage) return;
 
-    setIsLoading(true);
-    setLoadingMessage("Generating your meme...");
+  //   setIsLoading(true);
+  //   setLoadingMessage("Generating your meme...");
 
-    try {
-      const container = imageContainerRef.current;
-      const { width, height } = container.getBoundingClientRect();
+  //   try {
+  //     const container = imageContainerRef.current;
+  //     const { width, height } = container.getBoundingClientRect();
 
-      const memeDataUrl = await generateMemeCanvas(
-        capturedImage,
-        textBoxes,
-        width,
-        height
-      );
+  //     const memeDataUrl = await generateMemeCanvas(
+  //       capturedImage,
+  //       textBoxes,
+  //       width,
+  //       height
+  //     );
 
-      try {
-        const res = await uploadImage(memeDataUrl.split(",")[1]);
+  //     try {
+  //       const res = await uploadImage(memeDataUrl.split(",")[1]);
 
-        if (!trueApi) {
-          return;
-        } 
+  //       if (!trueApi) {
+  //         return;
+  //       } 
 
-        await createMeme({
-          cid: res,
-          isTemplate: false,
-          memeTemplate: memeTemplate.toString(),
-        });
+  //       await createMeme({
+  //         cid: res,
+  //         isTemplate: false,
+  //         memeTemplate: memeTemplate.toString(),
+  //       });
 
-        await MemeSchema.attest(trueApi, account.address as string, {
-          cid: res,
-          isTemplate: false,
-          memeTemplate: memeTemplate,
-        });
+  //       await MemeSchema.attest(trueApi, account.address as string, {
+  //         cid: res,
+  //         isTemplate: false,
+  //         memeTemplate: memeTemplate,
+  //       });
 
-        console.log("Meme uploaded to IPFS:", res);
-      } catch (error) {
-        console.error("Error uploading to IPFS:", error);
-      }
+  //       console.log("Meme uploaded to IPFS:", res);
+  //     } catch (error) {
+  //       console.error("Error uploading to IPFS:", error);
+  //     }
 
-      setFinalMeme(memeDataUrl);
-      setStage(3);
-    } catch (error) {
-      console.error("Error generating meme:", error);
-    } finally {
-      setIsLoading(false);
-      setLoadingMessage("");
-    }
-  };
+  //     setFinalMeme(memeDataUrl);
+  //     setStage(3);
+  //   } catch (error) {
+  //     console.error("Error generating meme:", error);
+  //   } finally {
+  //     setIsLoading(false);
+  //     setLoadingMessage("");
+  //   }
+  // };
 
   return (
     <div className="flex flex-col items-center w-full">
@@ -138,7 +138,7 @@ const Stage2: React.FC<Stage2Props> = ({
             <Plus className="w-5 h-5" />
           </button>
           <button
-            onClick={generateMeme}
+            // onClick={generateMeme}
             className="w-9/12 sm:w-auto px-6 py-4 bg-blue-500 rounded-lg hover:bg-blue-600 
                      transition-colors flex items-center justify-center gap-2 shadow-lg"
           >

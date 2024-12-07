@@ -24,6 +24,57 @@ interface Stage1Props {
   setmemeTemplate: (state: number) => void;
 }
 
+const sampleTemplates: [
+  string,
+  bigint,
+  bigint,
+  bigint,
+  bigint,
+  boolean,
+  string,
+  string
+][] = [
+  [
+    "ipfs://bafybeihz4rqkwkuvpgkhvupfwwxdymvfkrqyjbzaw6n5vxhqgcm4smobky",
+    BigInt(1),
+    BigInt(50),
+    BigInt(20),
+    BigInt(1703187600),
+    true,
+    "Drake Meme",
+    "Drake",
+  ],
+  [
+    "ipfs://bafybeicv4pkbjnknuvgkxorfriwxqyv74sxgnio2m2f6ze6bwxutmuxpqa",
+    BigInt(2),
+    BigInt(30),
+    BigInt(15),
+    BigInt(1703274000),
+    false,
+    "Distracted Boyfriend",
+    "Relationships",
+  ],
+  [
+    "ipfs://bafybeihdwdcefgh4sl23yk4dv7syycfwxo2g3ydm3hf6vdlxxutm8j9rqb",
+    BigInt(3),
+    BigInt(45),
+    BigInt(25),
+    BigInt(1703360400),
+    true,
+    "Two Buttons",
+    "Decision",
+  ],
+  [
+    "ipfs://bafybeif5x3kjhgfdsr23cp4kv8qtycfwxo2g3ydm3hf6vdlxxutm8h7mqc",
+    BigInt(4),
+    BigInt(60),
+    BigInt(30),
+    BigInt(1703446800),
+    false,
+    "Doge",
+    "Animals",
+  ],
+];
 
 const Stage1: React.FC<Stage1Props> = ({
   setCapturedImage,
@@ -39,7 +90,10 @@ const Stage1: React.FC<Stage1Props> = ({
   const [base64Image, setBase64Image] = useState<string | null>(null);
   const [ipfsCid, setIpfsCid] = useState<string | null>(null);
   const [isUploadingToIpfs, setIsUploadingToIpfs] = useState(false);
-  const [templates, setTemplates] = useState<[string, bigint, bigint, bigint, bigint, boolean, string, string][]>([]);
+  const [templates, setTemplates] =
+    useState<
+      [string, bigint, bigint, bigint, bigint, boolean, string, string][]
+    >(sampleTemplates);
 
   // const { data: hash, writeContract, error } = useWriteContract();
   // const { isLoading: isConfirmingMarket, status: MarketCreationStatus } =
