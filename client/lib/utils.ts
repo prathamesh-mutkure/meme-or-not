@@ -15,6 +15,8 @@ interface MemeData {
   cid: string;
   isTemplate: Boolean;
   memeTemplate: string;
+  attestationHash: string;
+  type: string;
   // Add any other fields your Meme model requires
 }
 

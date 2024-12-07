@@ -5,6 +5,8 @@ const memeSchema = new mongoose.Schema({
   cid: String,
   isTemplate: Boolean,
   memeTemplate: String,
+  attestationHash: String,
+  type: String,
 });
 
 const Meme = mongoose.model("Meme", memeSchema);
