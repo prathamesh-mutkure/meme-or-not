@@ -10,7 +10,7 @@ import { generateMemeCanvas } from "./helper";
 // import { useAccount } from "wagmi";
 
 interface Stage2Props {
-  capturedImage: string | null;
+  capturedImage: File | null;
   textBoxes: TextBox[];
   setTextBoxes: React.Dispatch<React.SetStateAction<TextBox[]>>;
   imageContainerRef: React.RefObject<HTMLDivElement>;
@@ -69,7 +69,7 @@ const Stage2: React.FC<Stage2Props> = ({
 
   //       if (!trueApi) {
   //         return;
-  //       } 
+  //       }
 
   //       await createMeme({
   //         cid: res,
@@ -108,7 +108,7 @@ const Stage2: React.FC<Stage2Props> = ({
             onTouchMove={(e) => e.preventDefault()} // Prevent pull-to-refresh
           >
             <img
-              src={capturedImage}
+              src={URL.createObjectURL(capturedImage)}
               alt="Template"
               className="w-full h-full object-contain"
             />

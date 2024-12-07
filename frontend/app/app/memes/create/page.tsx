@@ -12,22 +12,22 @@ import type { TextBox } from "@/components/meme-creator/types";
 
 const MemeCreator: React.FC = () => {
   const [stage, setStage] = useState(1);
-  const [capturedImage, setCapturedImage] = useState<string | null>(null);
+  const [capturedImage, setCapturedImage] = useState<File | null>(null);
   const [textBoxes, setTextBoxes] = useState<TextBox[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState("");
   const [finalMeme, setFinalMeme] = useState<string | null>(null);
-//   const [trueApi, setTrueApi] = useState<TrueApi>();
+  //   const [trueApi, setTrueApi] = useState<TrueApi>();
   const imageContainerRef = useRef<HTMLDivElement>(null);
   const [memeTemplate, setmemeTemplate] = useState(0);
 
-//   useEffect(() => {
-//     const setupapi = async () => {
-//       const api = await getTrueNetworkInstance();
-//       setTrueApi(api);
-//     };
-//     setupapi();
-//   }, []);
+  //   useEffect(() => {
+  //     const setupapi = async () => {
+  //       const api = await getTrueNetworkInstance();
+  //       setTrueApi(api);
+  //     };
+  //     setupapi();
+  //   }, []);
 
   const RenderCurrentStage = () => {
     switch (stage) {

@@ -16,8 +16,8 @@ import { uploadFileToBucket } from "@/lib/akave-helper";
 // import { Abi, Address } from "viem";
 
 interface Stage1Props {
-  setCapturedImage: (image: string | null) => void;
-  capturedImage: string | null;
+  setCapturedImage: (image: File | null) => void;
+  capturedImage: File | null;
   setStage: (stage: number) => void;
   setIsLoading: (loading: boolean) => void;
   setLoadingMessage: (message: string) => void;
@@ -264,6 +264,8 @@ const Stage1: React.FC<Stage1Props> = ({
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
+    console.log(selectedFile);
+
     if (selectedFile) {
       setFile(selectedFile);
       setError(null);
@@ -391,12 +393,12 @@ const Stage1: React.FC<Stage1Props> = ({
         </div>
       </div>
 
-      {selectedImage && (
+      {file && (
         <div className="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50">
           <div className="bg-gray-800 rounded-xl max-w-2xl w-full p-4">
             <div className="relative w-full aspect-square bg-gray-900 rounded-lg overflow-hidden mb-4">
               <img
-                src={selectedImage}
+                src={URL.createObjectURL(file)}
                 alt="Selected Template"
                 className="w-full h-full object-contain"
               />
