@@ -48,7 +48,7 @@ app.post("/api/relay", async (req, res) => {
     const contract = new Contract(contractAddress, contractABI, relayerWallet);
 
     // Estimate the gas required for the transaction
-    const voteCost = parseEther("0.001"); // Replace with actual voteCost from your contract
+    const voteCost = parseEther("0.0001"); // Replace with actual voteCost from your contract
 
     const gasLimit = await contract.vote.estimateGas(
       userAddress,
