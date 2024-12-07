@@ -65,7 +65,7 @@ const MemeCreator: React.FC = () => {
             finalMeme={finalMeme}
             setStage={setStage}
             setFinalMeme={setFinalMeme}
-            shareText="Check out this meme I created with Meme.True! 🎨"
+            shareText="Check out this meme I created with MemeOrNot! 🎨"
           />
         );
       default:

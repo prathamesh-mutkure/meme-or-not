@@ -9,10 +9,8 @@ import {
 export function createMarketCreatedEvent(
   marketId: BigInt,
   creator: Address,
-  bucketName: string,
-  metadata: string,
-  fileName: string,
-  endTime: BigInt
+  endTime: BigInt,
+  metadata: string
 ): MarketCreated {
   let marketCreatedEvent = changetype<MarketCreated>(newMockEvent())
 
@@ -28,19 +26,13 @@ export function createMarketCreatedEvent(
     new ethereum.EventParam("creator", ethereum.Value.fromAddress(creator))
   )
   marketCreatedEvent.parameters.push(
-    new ethereum.EventParam("bucketName", ethereum.Value.fromString(bucketName))
-  )
-  marketCreatedEvent.parameters.push(
-    new ethereum.EventParam("metadata", ethereum.Value.fromString(metadata))
-  )
-  marketCreatedEvent.parameters.push(
-    new ethereum.EventParam("fileName", ethereum.Value.fromString(fileName))
-  )
-  marketCreatedEvent.parameters.push(
     new ethereum.EventParam(
       "endTime",
       ethereum.Value.fromUnsignedBigInt(endTime)
     )
+  )
+  marketCreatedEvent.parameters.push(
+    new ethereum.EventParam("metadata", ethereum.Value.fromString(metadata))
   )
 
   return marketCreatedEvent

@@ -2,10 +2,8 @@ type MarketCreated @entity(immutable: true) {
   id: Bytes!
   marketId: BigInt! # uint256
   creator: Bytes! # address
-  bucketName: String! # string
-  metadata: String! # string
-  fileName: String! # string
   endTime: BigInt! # uint256
+  metadata: String! # string
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!

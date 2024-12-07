@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const { Meme, GasModel } = require("./model");
 const { ethers, parseEther, Contract } = require("ethers");
-const CONTRACT = require("./MemeTrue.json");
+const CONTRACT = require("./MemeOrNot.json");
 require("dotenv").config();
 
 const app = express();

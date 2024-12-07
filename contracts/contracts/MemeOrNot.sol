@@ -10,9 +10,7 @@ contract MemeOrNot {
         uint256 noVotes;
         uint256 totalStaked;
         bool isActive;
-        string bucketName;
         string metadata;
-        string fileName;
         mapping(address => bool) hasVoted;
         address[] yesVoters;
         address[] noVoters;
@@ -26,10 +24,8 @@ contract MemeOrNot {
     event MarketCreated(
         uint256 indexed marketId,
         address indexed creator,
-        string bucketName,
-        string metadata,
-        string fileName,
-        uint256 endTime
+        uint256 endTime,
+        string metadata
     );
     event VoteCast(uint256 indexed marketId, address indexed voter, bool vote);
     event RewardsDistributed(
@@ -52,7 +48,7 @@ contract MemeOrNot {
         return marketCount;
     }
 
-    function createMarket(string memory metadata, string memory bucketName, string memory fileName) external {
+    function createMarket(string memory metadata) external {
         uint256 endTime = block.timestamp + 6 hours;
 
         Market storage newMarket = markets[marketCount];
@@ -60,10 +56,8 @@ contract MemeOrNot {
         newMarket.endTime = endTime;
         newMarket.isActive = true;
         newMarket.metadata = metadata;
-        newMarket.bucketName = bucketName;
-        newMarket.fileName = fileName;
 
-        emit MarketCreated(marketCount, msg.sender, bucketName, metadata, fileName, endTime);
+        emit MarketCreated(marketCount, msg.sender, endTime, metadata);
 
         marketCount++;
     }
@@ -79,9 +73,7 @@ contract MemeOrNot {
             uint256 noVotes,
             uint256 totalStaked,
             bool isActive,
-            string memory bucketName,
-            string memory metadata,
-            string memory fileName
+            string memory metadata
         )
     {
         Market storage market = markets[marketId];
@@ -92,9 +84,7 @@ contract MemeOrNot {
             market.noVotes,
             market.totalStaked,
             market.isActive,
-            market.bucketName,
-            market.metadata,
-            market.fileName
+            market.metadata
         );
     }
 

@@ -8,9 +8,9 @@ dataSources:
     name: MemeOrNot
     network: base-sepolia
     source:
-      address: "0x2181EF3804370624Ac9658BE9042EC0Ade4E159C"
+      address: "0xF91D4548a7E2a93fCC218ADC7ce619DCD53a24e3"
       abi: MemeOrNot
-      startBlock: 18917229
+      startBlock: 18918385
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -23,7 +23,7 @@ dataSources:
         - name: MemeOrNot
           file: ./abis/MemeOrNot.json
       eventHandlers:
-        - event: MarketCreated(indexed uint256,indexed address,string,string,string,uint256)
+        - event: MarketCreated(indexed uint256,indexed address,uint256,string)
           handler: handleMarketCreated
         - event: RewardsDistributed(indexed uint256,indexed address,uint256)
           handler: handleRewardsDistributed
