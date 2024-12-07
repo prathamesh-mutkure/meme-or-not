@@ -1,9 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
-import { X, Menu } from "lucide-react";
+import React from "react";
 import Link from "next/link";
-
 import {
   ConnectWallet,
   Wallet,
@@ -21,75 +19,21 @@ import {
   EthBalance,
 } from "@coinbase/onchainkit/identity";
 
-const MobileNav: React.FC<{
-  isOpen: boolean;
-  onClose: () => void;
-  navLinks: Array<{ href: string; label: string }>;
-}> = ({ isOpen, onClose, navLinks }) => {
-  if (!isOpen) return null;
-
-  return (
-    <div className="fixed inset-0 bg-background z-40">
-      <div className="p-4 flex justify-between items-center border-b">
-        <h1 className="text-2xl font-bold">Meme.True</h1>
-        <button onClick={onClose} className="p-2">
-          <X className="w-6 h-6" />
-        </button>
-      </div>
-      <nav className="p-4">
-        {navLinks.map((link) => (
-          <Link
-            key={link.href}
-            href={link.href}
-            className={`block py-3 text-lg ${"text-foreground/70"}`}
-            onClick={onClose}
-          >
-            {link.label}
-          </Link>
-        ))}
-      </nav>
-    </div>
-  );
-};
-
 const Header: React.FC = () => {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  const navLinks = [
-    { href: "/app/memes", label: "Explore" },
-    { href: "/app/memes/create", label: "Create" },
-    { href: "/app/memes/settlements", label: "Settlements" },
-  ];
-
   return (
     <header className="bg-background text-foreground p-4">
       <div className="max-w-7xl mx-auto flex justify-between items-center">
-        {/* Mobile Menu Button */}
-        <button
-          className="lg:hidden p-2"
-          onClick={() => setIsMobileMenuOpen(true)}
-        >
-          <Menu className="w-6 h-6" />
-        </button>
-
         {/* Logo and Desktop Navigation */}
         <div className="hidden lg:flex items-center gap-8">
-          <h1 className="text-2xl font-bold">Meme.True</h1>
-          <nav className="flex items-center gap-6">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="text-foreground/80 hover:text-foreground transition-colors duration-200"
-              >
-                {link.label}
-              </Link>
-            ))}
-          </nav>
+          <Link href="/" className="hover:opacity-80 transition-opacity">
+            <h1 className="text-2xl font-bold">MemeOrNot</h1>
+          </Link>
         </div>
 
         {/* Mobile Logo (centered) */}
-        <h1 className="text-2xl font-bold lg:hidden">Meme.True</h1>
+        <Link href="/" className="lg:hidden hover:opacity-80 transition-opacity">
+          <h1 className="text-2xl font-bold">MemeOrNot</h1>
+        </Link>
 
         {/* Wallet Controls */}
         <div className="flex items-center gap-2 sm:gap-4 justify-center">
@@ -118,13 +62,6 @@ const Header: React.FC = () => {
           </Wallet>
         </div>
       </div>
-
-      {/* Mobile Navigation Menu */}
-      <MobileNav
-        isOpen={isMobileMenuOpen}
-        onClose={() => setIsMobileMenuOpen(false)}
-        navLinks={navLinks}
-      />
     </header>
   );
 };
