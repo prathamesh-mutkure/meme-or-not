@@ -5,9 +5,9 @@ import { DraggableText } from "./DraggableText";
 import { TextControl } from "./TextControl";
 import { generateMemeCanvas } from "./helper";
 // import { createMeme, uploadImage } from "@/lib/utils";
-// import { MemeSchema } from "@/true-network/schema";
-// import { TrueApi } from "@truenetworkio/sdk";
-// import { useAccount } from "wagmi";
+import { MemeSchema } from "@/true-network/schema";
+import { TrueApi } from "@truenetworkio/sdk";
+import { useAccount } from "wagmi";
 
 interface Stage2Props {
   capturedImage: File | null;
@@ -18,7 +18,7 @@ interface Stage2Props {
   setStage: (stage: number) => void;
   setIsLoading: (loading: boolean) => void;
   setLoadingMessage: (message: string) => void;
-  // trueApi?: TrueApi;
+  trueApi?: TrueApi;
   memeTemplate: number;
 }
 
@@ -31,7 +31,7 @@ const Stage2: React.FC<Stage2Props> = ({
   setStage,
   setIsLoading,
   setLoadingMessage,
-  // trueApi,
+  trueApi,
   memeTemplate,
 }) => {
   const addTextBox = () => {
@@ -45,7 +45,7 @@ const Stage2: React.FC<Stage2Props> = ({
     setTextBoxes((prev) => [...prev, newBox]);
   };
 
-  // const account = useAccount();
+  const account = useAccount();
 
   // const generateMeme = async () => {
   //   if (!imageContainerRef.current || !capturedImage) return;

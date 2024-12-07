@@ -10,7 +10,9 @@ contract MemeOrNot {
         uint256 noVotes;
         uint256 totalStaked;
         bool isActive;
+        string bucketName;
         string metadata;
+        string fileName;
         mapping(address => bool) hasVoted;
         address[] yesVoters;
         address[] noVoters;
@@ -24,8 +26,10 @@ contract MemeOrNot {
     event MarketCreated(
         uint256 indexed marketId,
         address indexed creator,
-        uint256 endTime,
-        string metadata
+        string bucketName,
+        string metadata,
+        string fileName,
+        uint256 endTime
     );
     event VoteCast(uint256 indexed marketId, address indexed voter, bool vote);
     event RewardsDistributed(
@@ -48,7 +52,7 @@ contract MemeOrNot {
         return marketCount;
     }
 
-    function createMarket(string memory metadata) external {
+    function createMarket(string memory metadata, string memory bucketName, string memory fileName) external {
         uint256 endTime = block.timestamp + 6 hours;
 
         Market storage newMarket = markets[marketCount];
@@ -56,8 +60,10 @@ contract MemeOrNot {
         newMarket.endTime = endTime;
         newMarket.isActive = true;
         newMarket.metadata = metadata;
+        newMarket.bucketName = bucketName;
+        newMarket.fileName = fileName;
 
-        emit MarketCreated(marketCount, msg.sender, endTime, metadata);
+        emit MarketCreated(marketCount, msg.sender, bucketName, metadata, fileName, endTime);
 
         marketCount++;
     }
@@ -73,7 +79,9 @@ contract MemeOrNot {
             uint256 noVotes,
             uint256 totalStaked,
             bool isActive,
-            string memory metadata
+            string memory bucketName,
+            string memory metadata,
+            string memory fileName
         )
     {
         Market storage market = markets[marketId];
@@ -84,7 +92,9 @@ contract MemeOrNot {
             market.noVotes,
             market.totalStaked,
             market.isActive,
-            market.metadata
+            market.bucketName,
+            market.metadata,
+            market.fileName
         );
     }
 

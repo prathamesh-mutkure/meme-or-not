@@ -6,6 +6,6 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export const DEPLOYED_CONTRACT = '0xD8bb83032b51dAE6C08aA27dcBb9FFddA4264e2c';
+export const DEPLOYED_CONTRACT = '0x63E0B21F8950a4F63A9b7da037c77A04C8ceE76f';
 
 export const ABI = CONTRACT.abi;

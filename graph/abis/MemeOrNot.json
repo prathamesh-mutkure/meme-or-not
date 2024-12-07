@@ -16,15 +16,27 @@
       },
       {
         "indexed": false,
-        "internalType": "uint256",
-        "name": "endTime",
-        "type": "uint256"
+        "internalType": "string",
+        "name": "bucketName",
+        "type": "string"
       },
       {
         "indexed": false,
         "internalType": "string",
         "name": "metadata",
         "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "fileName",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "endTime",
+        "type": "uint256"
       }
     ],
     "name": "MarketCreated",
@@ -82,7 +94,9 @@
   },
   {
     "inputs": [
-      { "internalType": "string", "name": "metadata", "type": "string" }
+      { "internalType": "string", "name": "metadata", "type": "string" },
+      { "internalType": "string", "name": "bucketName", "type": "string" },
+      { "internalType": "string", "name": "fileName", "type": "string" }
     ],
     "name": "createMarket",
     "outputs": [],
@@ -108,7 +122,9 @@
       { "internalType": "uint256", "name": "noVotes", "type": "uint256" },
       { "internalType": "uint256", "name": "totalStaked", "type": "uint256" },
       { "internalType": "bool", "name": "isActive", "type": "bool" },
-      { "internalType": "string", "name": "metadata", "type": "string" }
+      { "internalType": "string", "name": "bucketName", "type": "string" },
+      { "internalType": "string", "name": "metadata", "type": "string" },
+      { "internalType": "string", "name": "fileName", "type": "string" }
     ],
     "stateMutability": "view",
     "type": "function"
@@ -138,7 +154,9 @@
       { "internalType": "uint256", "name": "noVotes", "type": "uint256" },
       { "internalType": "uint256", "name": "totalStaked", "type": "uint256" },
       { "internalType": "bool", "name": "isActive", "type": "bool" },
-      { "internalType": "string", "name": "metadata", "type": "string" }
+      { "internalType": "string", "name": "bucketName", "type": "string" },
+      { "internalType": "string", "name": "metadata", "type": "string" },
+      { "internalType": "string", "name": "fileName", "type": "string" }
     ],
     "stateMutability": "view",
     "type": "function"

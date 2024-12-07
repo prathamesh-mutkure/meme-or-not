@@ -2,8 +2,8 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-// import { getTrueNetworkInstance } from "@/true-network/true.config";
-// import { TrueApi } from "@truenetworkio/sdk";
+import { getTrueNetworkInstance } from "@/true-network/true.config";
+import { TrueApi } from "@truenetworkio/sdk";
 import Stage1 from "@/components/meme-creator/Stage1";
 import Stage2 from "@/components/meme-creator/Stage2";
 import Stage3 from "@/components/meme-creator/Stage3";
@@ -17,17 +17,17 @@ const MemeCreator: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState("");
   const [finalMeme, setFinalMeme] = useState<string | null>(null);
-  //   const [trueApi, setTrueApi] = useState<TrueApi>();
+  const [trueApi, setTrueApi] = useState<TrueApi>();
   const imageContainerRef = useRef<HTMLDivElement>(null);
   const [memeTemplate, setmemeTemplate] = useState(0);
 
-  //   useEffect(() => {
-  //     const setupapi = async () => {
-  //       const api = await getTrueNetworkInstance();
-  //       setTrueApi(api);
-  //     };
-  //     setupapi();
-  //   }, []);
+  useEffect(() => {
+    const setupapi = async () => {
+      const api = await getTrueNetworkInstance();
+      setTrueApi(api);
+    };
+    setupapi();
+  }, []);
 
   const RenderCurrentStage = () => {
     switch (stage) {
@@ -39,17 +39,11 @@ const MemeCreator: React.FC = () => {
             setStage={setStage}
             setIsLoading={setIsLoading}
             setLoadingMessage={setLoadingMessage}
-            // trueApi={trueApi}
+            trueApi={trueApi}
             setmemeTemplate={setmemeTemplate}
           />
         );
       case 2: {
-        // if (!capturedImage) {
-        //   useEffect(() => {
-        //     setStage(1);
-        //   }, []);
-        //   return null;
-        // }
         return (
           <Stage2
             capturedImage={capturedImage}
@@ -60,7 +54,7 @@ const MemeCreator: React.FC = () => {
             setStage={setStage}
             setIsLoading={setIsLoading}
             setLoadingMessage={setLoadingMessage}
-            // trueApi={trueApi}
+            trueApi={trueApi}
             memeTemplate={memeTemplate}
           />
         );
