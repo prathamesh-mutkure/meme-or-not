@@ -1,5 +1,6 @@
 import "@coinbase/onchainkit/styles.css";
 import BottomHeader from "@/components/BottomHeader";
+import Header from "@/components/Header";
 
 export default function RootLayout({
   children,
@@ -8,6 +9,7 @@ export default function RootLayout({
 }>) {
   return (
     <>
+      <Header />
       {children}
       <BottomHeader />
     </>
