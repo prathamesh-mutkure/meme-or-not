@@ -78,7 +78,15 @@ export async function listFilesInBucket(bucketName: string) {
     const response = await akaveBase.get(`/buckets/${bucketName}/files`);
     console.log("listFilesInBucket", response.data);
 
-    return response.data;
+    return response.data as {
+      success: true;
+      data: {
+        Name: string;
+        RootCID: string;
+        Size: string;
+        CreatedAt: string;
+      }[];
+    };
   } catch (e) {
     const error = e as AxiosError;
 
@@ -93,7 +101,15 @@ export async function getFileMetadata(bucketName: string, filename: string) {
     );
     console.log("getFileMetadata", response.data);
 
-    return response.data;
+    return response.data as {
+      success: true;
+      data: {
+        Name: string;
+        RootCID: string;
+        Size: string;
+        CreatedAt: string;
+      };
+    };
   } catch (e) {
     const error = e as AxiosError;
 
