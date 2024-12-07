@@ -1,8 +1,8 @@
 {
   "base-sepolia": {
     "MemeOrNot": {
-      "address": "0x63E0B21F8950a4F63A9b7da037c77A04C8ceE76f",
-      "startBlock": 18914374
+      "address": "0x2181EF3804370624Ac9658BE9042EC0Ade4E159C",
+      "startBlock": 18917229
     }
   }
 }
