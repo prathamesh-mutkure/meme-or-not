@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { ImagePlus, Loader2 } from "lucide-react";
 import { getAllMemes } from "@/lib/utils";
 import { MemeTemplate } from "@/lib/memes";
+import LazyBlobImage from "@/components/lazy-image";
 
 const MemeGallery = () => {
   const [memes, setMemes] = useState<MemeTemplate[]>([]);
@@ -24,19 +25,19 @@ const MemeGallery = () => {
         const memes = await getAllMemes();
         
         if (memes.data) {
-          const memesWithImages = await Promise.all(
-            memes.data.map(async (meme) => {
-              const data = await fetch(
-                `https://gateway.lighthouse.storage/ipfs/${meme.cid}`
-              );
-              const img = await data.text();
-              return {
-                ...meme,
-                image: `data:image/png;base64,${img}`
-              };
-            })
-          );
-          setMemes(memesWithImages);
+          // const memesWithImages = await Promise.all(
+          //   memes.data.map(async (meme) => {
+          //     const data = await fetch(
+          //       `https://gateway.lighthouse.storage/ipfs/${meme.cid}`
+          //     );
+          //     const img = await data.text();
+          //     return {
+          //       ...meme,
+          //       image: <`data:image/png;base64,${img}`>
+          //     };
+          //   })
+          // );
+          setMemes(memes.data);
         }
       } catch (error) {
         console.error("Error loading memes:", error);
@@ -82,12 +83,13 @@ const MemeGallery = () => {
                 transition={{ duration: 0.2 }}
               >
                 <div className="aspect-square bg-gray-800 rounded-lg overflow-hidden">
-                  <img
+                  {/* <img
                     src={meme.image}
                     alt={`meme`}
                     className="w-full h-full object-cover"
                     crossOrigin="anonymous"
-                  />
+                  /> */}
+                  <LazyBlobImage cid={meme.cid} type={"wolrus"} className="w-full h-full object-cover"/>
                 </div>
               </motion.div>
             ))}

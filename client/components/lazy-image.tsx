@@ -27,6 +27,10 @@ const LazyBlobImage = ({
 
         if (type === "wolrus") {
           const blob = await downloadBlob(cid);
+          console.log(blob);
+          console.log(URL.createObjectURL(blob));
+          
+          
           setImageUrl(URL.createObjectURL(blob));
         } else {
           const url = await downloadAndDisplayFile("test", cid);

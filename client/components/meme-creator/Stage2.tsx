@@ -4,10 +4,12 @@ import { TextBox } from "./types";
 import { DraggableText } from "./DraggableText";
 import { TextControl } from "./TextControl";
 import { generateMemeCanvas } from "./helper";
-import { createMeme, uploadImage } from "@/lib/utils";
+import { createMeme, safeBase64ToFile, uploadImage } from "@/lib/utils";
 import { MemeSchema } from "@/true-network/schema";
 import { TrueApi } from "@truenetworkio/sdk";
 import { useAccount } from "wagmi";
+import { adjectives, animals, colors, uniqueNamesGenerator } from "unique-names-generator";
+import { storeFile } from "@/lib/walrus-helper";
 
 interface Stage2Props {
   capturedImage: string | null;
@@ -65,8 +67,24 @@ const Stage2: React.FC<Stage2Props> = ({
       );
 
       try {
-        const res = await uploadImage(memeDataUrl.split(",")[1]);
 
+        const randomName = uniqueNamesGenerator({
+          dictionaries: [adjectives, colors, animals],
+          separator: '-',
+          length: 3
+        });
+
+        const fileToUpload = await safeBase64ToFile(memeDataUrl, randomName);
+
+        const res = await storeFile(fileToUpload);
+        let cid;
+
+        if ('alreadyCertified' in res) {
+           cid = res.alreadyCertified.blobId;
+        } else {
+          cid = res.newlyCreated.blobObject.blobId;
+        }
+        
         if (!trueApi) {
           return;
         }
@@ -75,7 +93,7 @@ const Stage2: React.FC<Stage2Props> = ({
           trueApi,
           account.address as string,
           {
-            cid: res,
+            cid: cid,
             isTemplate: false,
             memeTemplate: memeTemplate,
           }
@@ -83,8 +101,9 @@ const Stage2: React.FC<Stage2Props> = ({
 
         if (!attestationHash) return;
 
+        // TODO: Handle Akave
         await createMeme({
-          cid: res,
+          cid: cid,
           isTemplate: false,
           memeTemplate: memeTemplate.toString(),
           attestationHash: attestationHash,
