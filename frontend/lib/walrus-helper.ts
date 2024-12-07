@@ -11,6 +11,46 @@ const axiosPublisher = axios.create({
   baseURL: PUBLISHER,
 });
 
+type TAlreadyCertified = {
+  alreadyCertified: {
+    blobId: string;
+    endEpoch: number;
+    eventOrObject: {
+      Event: {
+        eventSeq: string;
+        txDigest: string;
+      };
+    };
+  };
+};
+
+type TNewlyCertified = {
+  newlyCreated: {
+    blobObject: {
+      blobId: string;
+      certifiedEpoch: number;
+      deletable: boolean;
+      encodingType: string;
+      id: string;
+      registeredEpoch: number;
+      size: number;
+      storage: {
+        endEpoch: number;
+        id: string;
+        startEpoch: number;
+        storageSize: number;
+      };
+    };
+    cost: number;
+    resourceOperation: {
+      RegisterFromScratch: {
+        encoded_length: number;
+        epochs_ahead: number;
+      };
+    };
+  };
+};
+
 export async function storeFile(file: File) {
   const formData = new FormData();
   formData.append("file", file);
@@ -21,7 +61,7 @@ export async function storeFile(file: File) {
     },
   });
 
-  return response.data;
+  return response.data as TAlreadyCertified | TNewlyCertified;
 }
 
 export async function downloadBlob(blobId: string) {
