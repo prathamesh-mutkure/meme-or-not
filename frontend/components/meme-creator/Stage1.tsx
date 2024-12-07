@@ -168,9 +168,9 @@ const Stage1: React.FC<Stage1Props> = ({
       setIsLoading(false);
       setLoadingMessage("");
       setSelectedImage(null);
-      // setCapturedImage(
-      //   base64Image || (ipfsCid ? `https://ipfs.io/ipfs/${ipfsCid}` : null)
-      // );
+      setCapturedImage(
+        file
+      );
       setLoadingMessage("Transaction is being confirmed...");
 
       setmemeTemplate(Number(marketCount));
@@ -286,7 +286,7 @@ const Stage1: React.FC<Stage1Props> = ({
 
     try {
       const res = await uploadFileToBucket("test", selectedFile);
-      console.log("RESPONSE", res.data.RootCID);
+      setIpfsCid(res.data.RootCID);
 
       setFile(null);
       // Reset the file input
