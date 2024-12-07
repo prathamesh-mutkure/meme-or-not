@@ -61,6 +61,8 @@ export async function storeFile(file: File) {
     },
   });
 
+  console.log(response.data);
+
   return response.data as TAlreadyCertified | TNewlyCertified;
 }
 
@@ -69,8 +71,7 @@ export async function downloadBlob(blobId: string) {
     responseType: "blob",
   });
 
-  const blob = new Blob([response.data]);
-  const url = window.URL.createObjectURL(blob);
+  const blob = new Blob([response.data], { type: "image/*" });
 
-  return url;
+  return blob;
 }
