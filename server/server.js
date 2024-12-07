@@ -23,7 +23,7 @@ mongoose
 const provider = new ethers.JsonRpcProvider(process.env.RPC_URL); // Add your RPC URL to .env
 const relayerWallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider); // Add your private key to .env
 
-const contractAddress = "0xF91D4548a7E2a93fCC218ADC7ce619DCD53a24e3";
+const contractAddress = "0x0C4dcACda4eeedA552959EB71b5fAd708914fe60";
 const contractABI = CONTRACT.abi;
 
 // Create - GET Health Check
