@@ -10,8 +10,7 @@ import {
   useWriteContract,
 } from "wagmi";
 import { ABI, DEPLOYED_CONTRACT } from "@/lib/utils";
-// import { TrueApi } from "@truenetworkio/sdk";
-// import { uploadImage } from "@/lib/utils";
+import { TrueApi } from "@truenetworkio/sdk";
 // import { Abi, Address } from "viem";
 
 interface Stage1Props {
@@ -20,7 +19,7 @@ interface Stage1Props {
   setStage: (stage: number) => void;
   setIsLoading: (loading: boolean) => void;
   setLoadingMessage: (message: string) => void;
-  // trueApi?: TrueApi;
+  trueApi?: TrueApi;
   setmemeTemplate: (state: number) => void;
 }
 
@@ -82,14 +81,13 @@ const Stage1: React.FC<Stage1Props> = ({
   setStage,
   setIsLoading,
   setLoadingMessage,
-  // trueApi,
+  trueApi,
   setmemeTemplate,
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [base64Image, setBase64Image] = useState<string | null>(null);
   const [ipfsCid, setIpfsCid] = useState<string | null>(null);
-  const [isUploadingToIpfs, setIsUploadingToIpfs] = useState(false);
   const [templates, setTemplates] =
     useState<
       [string, bigint, bigint, bigint, bigint, boolean, string, string][]
@@ -168,9 +166,7 @@ const Stage1: React.FC<Stage1Props> = ({
       setIsLoading(false);
       setLoadingMessage("");
       setSelectedImage(null);
-      setCapturedImage(
-        file
-      );
+      setCapturedImage(file);
       setLoadingMessage("Transaction is being confirmed...");
 
       setmemeTemplate(Number(marketCount));
@@ -192,7 +188,7 @@ const Stage1: React.FC<Stage1Props> = ({
     setLoadingMessage("Preparing transaction...");
 
     // Wait for IPFS upload if it's still in progress
-    if (isUploadingToIpfs) {
+    if (isUploading) {
       setLoadingMessage("Waiting for IPFS upload to complete...");
       return;
     }
@@ -212,50 +208,6 @@ const Stage1: React.FC<Stage1Props> = ({
       setLoadingMessage("Transaction failed. Please try again.");
     }
   };
-
-  // const handleFileUpload = async (
-  //   event: React.ChangeEvent<HTMLInputElement>
-  // ) => {
-  //   const file = event.target.files?.[0];
-  //   if (!file) return;
-
-  //   setIsLoading(true);
-  //   setLoadingMessage("Processing your photo...");
-
-  //   try {
-  //     // Convert the file to base64
-  //     const reader = new FileReader();
-  //     reader.onloadend = async () => {
-  //       const base64String = reader.result as string;
-  //       setBase64Image(base64String);
-  //       setSelectedImage(base64String);
-  //       setLoadingMessage("Uploading to IPFS...");
-  //       setIsUploadingToIpfs(true);
-
-  //       try {
-  //         const res = await uploadImage(
-  //           base64String.replace(/^data:image\/\w+;base64,/, "")
-  //         );
-
-  //         console.log(res);
-
-  //         // Store the CID
-  //         setIpfsCid(res);
-  //         setIsUploadingToIpfs(false);
-  //       } catch (error) {
-  //         console.error("Error uploading to IPFS:", error);
-  //         setIsUploadingToIpfs(false);
-  //       }
-  //     };
-  //     reader.readAsDataURL(file);
-  //   } catch (error) {
-  //     console.error("Error processing file:", error);
-  //     setIsUploadingToIpfs(false);
-  //   } finally {
-  //     setIsLoading(false);
-  //     setLoadingMessage("");
-  //   }
-  // };
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
@@ -287,8 +239,6 @@ const Stage1: React.FC<Stage1Props> = ({
     try {
       const res = await uploadFileToBucket("test", selectedFile);
       setIpfsCid(res.data.RootCID);
-
-      setFile(null);
       // Reset the file input
       const fileInput = document.querySelector(
         'input[type="file"]'
@@ -329,9 +279,6 @@ const Stage1: React.FC<Stage1Props> = ({
     }
   }, [error, setLoadingMessage, setIsLoading]);
 
-  // // Disable template selection during IPFS upload
-  const isDisabled = isUploadingToIpfs;
-
   return (
     <div className="flex flex-col items-center w-full">
       <div className="w-full">
@@ -343,7 +290,7 @@ const Stage1: React.FC<Stage1Props> = ({
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className="relative aspect-square bg-gray-800 rounded-lg overflow-hidden cursor-pointer group"
-            onClick={() => !isDisabled && fileInputRef.current?.click()}
+            onClick={() => !isUploading && fileInputRef.current?.click()}
           >
             <div className="absolute inset-0 flex flex-col items-center justify-center">
               <Camera className="w-8 h-8 mb-2" />
@@ -355,7 +302,7 @@ const Stage1: React.FC<Stage1Props> = ({
               accept="image/*"
               onChange={handleFileSelect}
               className="hidden"
-              disabled={isDisabled}
+              disabled={isUploading}
             />
           </motion.div>
 
@@ -407,7 +354,7 @@ const Stage1: React.FC<Stage1Props> = ({
                 }}
                 className="px-6 py-3 bg-gray-700 rounded-lg hover:bg-gray-600 
                            transition-colors flex items-center gap-2"
-                disabled={isDisabled}
+                disabled={isUploading}
               >
                 Cancel
               </button>
@@ -415,9 +362,9 @@ const Stage1: React.FC<Stage1Props> = ({
                 onClick={generateTemplate}
                 className="px-6 py-3 bg-primary hover:bg-primary/90 rounded-lg
                            transition-colors flex items-center gap-2 text-white"
-                disabled={isDisabled}
+                disabled={isUploading}
               >
-                {isUploadingToIpfs ? "Uploading..." : "Use Template"}
+                {isUploading ? "Uploading..." : "Use Template"}
               </button>
             </div>
           </div>
