@@ -184,8 +184,6 @@ const Stage1: React.FC<Stage1Props> = ({
             base64String.replace(/^data:image\/\w+;base64,/, "")
           );
 
-          console.log(res);
-
           // Store the CID
           setIpfsCid(res);
           setIsUploadingToIpfs(false);

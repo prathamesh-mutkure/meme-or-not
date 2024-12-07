@@ -69,18 +69,26 @@ const Stage2: React.FC<Stage2Props> = ({
 
         if (!trueApi) {
           return;
-        } 
+        }
+
+        const attestationHash = await MemeSchema.attest(
+          trueApi,
+          account.address as string,
+          {
+            cid: res,
+            isTemplate: false,
+            memeTemplate: memeTemplate,
+          }
+        );
+
+        if (!attestationHash) return;
 
         await createMeme({
           cid: res,
           isTemplate: false,
           memeTemplate: memeTemplate.toString(),
-        });
-
-        await MemeSchema.attest(trueApi, account.address as string, {
-          cid: res,
-          isTemplate: false,
-          memeTemplate: memeTemplate,
+          attestationHash: attestationHash,
+          type: "walrus",
         });
 
         console.log("Meme uploaded to IPFS:", res);
