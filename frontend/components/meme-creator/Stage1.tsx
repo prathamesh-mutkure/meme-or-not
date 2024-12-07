@@ -9,6 +9,7 @@ import { Camera } from "lucide-react";
 //   useReadContracts,
 // } from "wagmi";
 import { Template } from "./types";
+import { uploadFileToBucket } from "@/lib/akave-helper";
 // import { CONTRACT_ABI, DEPLOYED_CONTRACT } from "@/lib/ethers";
 // import { TrueApi } from "@truenetworkio/sdk";
 // import { uploadImage } from "@/lib/utils";
@@ -94,6 +95,9 @@ const Stage1: React.FC<Stage1Props> = ({
     useState<
       [string, bigint, bigint, bigint, bigint, boolean, string, string][]
     >(sampleTemplates);
+  const [error, setError] = useState<string | null>(null);
+  const [file, setFile] = useState<File | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
 
   // const { data: hash, writeContract, error } = useWriteContract();
   // const { isLoading: isConfirmingMarket, status: MarketCreationStatus } =
@@ -258,6 +262,48 @@ const Stage1: React.FC<Stage1Props> = ({
   //   }
   // };
 
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = e.target.files?.[0];
+    if (selectedFile) {
+      setFile(selectedFile);
+      setError(null);
+
+      const reader = new FileReader();
+      reader.onloadend = async () => {
+        const base64String = reader.result as string;
+        setBase64Image(base64String);
+        setSelectedImage(base64String);
+      };
+      handleUpload();
+    }
+  };
+
+  const handleUpload = async () => {
+    if (!file) {
+      setError("Please select a file");
+      return;
+    }
+
+    setIsUploading(true);
+    setError(null);
+
+    try {
+      const res = await uploadFileToBucket("test", file);
+      console.log("RESPONSE", res);
+
+      setFile(null);
+      // Reset the file input
+      const fileInput = document.querySelector(
+        'input[type="file"]'
+      ) as HTMLInputElement;
+      if (fileInput) fileInput.value = "";
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Upload failed");
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
   // const handleTemplateSelection = (template: [string, bigint, bigint, bigint, bigint, boolean, string, string], index: number) => {
   //   // For templates, we'll use the template URL directly
   //   setSelectedImage(null);
@@ -310,7 +356,7 @@ const Stage1: React.FC<Stage1Props> = ({
               ref={fileInputRef}
               type="file"
               accept="image/*"
-              // onChange={handleFileUpload}
+              onChange={handleFileSelect}
               className="hidden"
               disabled={isDisabled}
             />
