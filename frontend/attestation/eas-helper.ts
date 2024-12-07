@@ -5,6 +5,7 @@ import {
   TransactionProvider,
   TransactionSigner,
 } from "@ethereum-attestation-service/eas-sdk";
+import { SchemaRegistry } from "@ethereum-attestation-service/eas-sdk";
 
 type TMemeTemplate = {
   cid: string;
@@ -17,21 +18,40 @@ type TMeme = {
   memetemplate: string;
 };
 
-// TODO: Add EAS Contract on Base and Scheme UIDs
+// TODO: Add EAS Contracts on Base and Scheme UIDs
 const EASContractAddress = "0x";
+const schemaRegistryContractAddress = "0x";
+const schemaResolverAddress = "0x0a7E2Ff54e76B8E6659aedc9103FB21c038050D0"; // Sepolia 0.26
 const memeTemplateSchemeUID = "0x";
 const memeSchemeUID = "0x";
 
 const eas = new EAS(EASContractAddress);
 
-const memeTemplateSchemeEncoder = new SchemaEncoder(
-  "string cid, bool isTemplate"
-);
-const memeSchemeEncoder = new SchemaEncoder(
-  "string cid, bool isTemplate, memetemplate string"
-);
+const memeTemplateScheme = "string cid, bool isTemplate";
+const memeTemplateSchemeEncoder = new SchemaEncoder(memeTemplateScheme);
 
-async function attestMemeTemplate({
+const memeScheme = "string cid, bool isTemplate, memetemplate string";
+const memeSchemeEncoder = new SchemaEncoder(memeScheme);
+
+export async function registerSchema(
+  signer: TransactionSigner | TransactionProvider,
+  schema: string
+) {
+  const schemaRegistry = new SchemaRegistry(schemaRegistryContractAddress);
+  schemaRegistry.connect(signer);
+
+  const transaction = await schemaRegistry.register({
+    schema,
+    resolverAddress: schemaResolverAddress,
+    revocable: true,
+  });
+
+  const txId = await transaction.wait();
+
+  return txId;
+}
+
+export async function attestMemeTemplate({
   signer,
   userId,
   data,
@@ -73,7 +93,7 @@ async function attestMemeTemplate({
   return newAttestationUID;
 }
 
-async function attestMeme({
+export async function attestMeme({
   signer,
   userId,
   data,
