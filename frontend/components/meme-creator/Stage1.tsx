@@ -200,7 +200,7 @@ const Stage1: React.FC<Stage1Props> = ({
         address: DEPLOYED_CONTRACT,
         abi: ABI,
         functionName: "createMarket",
-        args: [ipfsCid, "test", file?.name],
+        args: [ipfsCid],
       });
 
       console.log("Write contract call completed");

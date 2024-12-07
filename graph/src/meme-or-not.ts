@@ -15,10 +15,8 @@ export function handleMarketCreated(event: MarketCreatedEvent): void {
   )
   entity.marketId = event.params.marketId
   entity.creator = event.params.creator
-  entity.bucketName = event.params.bucketName
-  entity.metadata = event.params.metadata
-  entity.fileName = event.params.fileName
   entity.endTime = event.params.endTime
+  entity.metadata = event.params.metadata
 
   entity.blockNumber = event.block.number
   entity.blockTimestamp = event.block.timestamp

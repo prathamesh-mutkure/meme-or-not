@@ -3,7 +3,7 @@
 import type { ReactNode } from "react";
 import { OnchainKitProvider } from "@coinbase/onchainkit";
 import { baseSepolia } from "wagmi/chains";
-import { createConfig, http } from "wagmi";
+import { createConfig, http, WagmiProvider } from "wagmi";
 import { coinbaseWallet } from "wagmi/connectors";
 
 const wagmiConfig = createConfig({
@@ -32,7 +32,7 @@ export function Providers(props: { children: ReactNode }) {
         },
       }}
     >
-      {props.children}
+      <WagmiProvider config={wagmiConfig}>{props.children}</WagmiProvider>;
     </OnchainKitProvider>
   );
 }

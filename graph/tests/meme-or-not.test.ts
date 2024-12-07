@@ -21,17 +21,13 @@ describe("Describe entity assertions", () => {
     let creator = Address.fromString(
       "0x0000000000000000000000000000000000000001"
     )
-    let bucketName = "Example string value"
-    let metadata = "Example string value"
-    let fileName = "Example string value"
     let endTime = BigInt.fromI32(234)
+    let metadata = "Example string value"
     let newMarketCreatedEvent = createMarketCreatedEvent(
       marketId,
       creator,
-      bucketName,
-      metadata,
-      fileName,
-      endTime
+      endTime,
+      metadata
     )
     handleMarketCreated(newMarketCreatedEvent)
   })
@@ -62,26 +58,14 @@ describe("Describe entity assertions", () => {
     assert.fieldEquals(
       "MarketCreated",
       "0xa16081f360e3847006db660bae1c6d1b2e17ec2a-1",
-      "bucketName",
-      "Example string value"
+      "endTime",
+      "234"
     )
     assert.fieldEquals(
       "MarketCreated",
       "0xa16081f360e3847006db660bae1c6d1b2e17ec2a-1",
       "metadata",
       "Example string value"
-    )
-    assert.fieldEquals(
-      "MarketCreated",
-      "0xa16081f360e3847006db660bae1c6d1b2e17ec2a-1",
-      "fileName",
-      "Example string value"
-    )
-    assert.fieldEquals(
-      "MarketCreated",
-      "0xa16081f360e3847006db660bae1c6d1b2e17ec2a-1",
-      "endTime",
-      "234"
     )
 
     // More assert options:
