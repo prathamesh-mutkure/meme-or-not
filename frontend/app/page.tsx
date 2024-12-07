@@ -1,6 +1,10 @@
 "use client";
 
-import { createBucket, uploadFileToBucket } from "@/lib/akave-helper";
+import {
+  createBucket,
+  downloadAndDisplayFile,
+  uploadFileToBucket,
+} from "@/lib/akave-helper";
 import Image from "next/image";
 import { useState } from "react";
 
@@ -8,6 +12,8 @@ export default function Home() {
   const [file, setFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const [imgUrl, setImgUrl] = useState<null | string>(null);
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
@@ -48,7 +54,7 @@ export default function Home() {
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
         <Image
           className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
+          src={imgUrl ?? "https://nextjs.org/icons/next.svg"}
           alt="Next.js logo"
           width={180}
           height={38}
@@ -90,12 +96,16 @@ export default function Home() {
             Read our docs
           </a>
           <button
-            onClick={() => {
-              const data = createBucket("test");
-              console.log(data);
+            onClick={async () => {
+              const imgUrl = await downloadAndDisplayFile(
+                "test",
+                "copium_prime.jpg"
+              );
+              console.log("IMG URL", imgUrl);
+              setImgUrl(imgUrl ?? null);
             }}
           >
-            Create Bucket
+            Download Image
           </button>
         </div>
 

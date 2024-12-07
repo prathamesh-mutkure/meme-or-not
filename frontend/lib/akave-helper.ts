@@ -142,11 +142,10 @@ export async function uploadFileToBucket(bucketName: string, file: File) {
   }
 }
 
-export async function downloadFileFromBucket(
+export async function downloadAndDisplayFile(
   bucketName: string,
-  fileName: string,
-  outputDir: string
-) {
+  fileName: string
+): Promise<string> {
   try {
     const response = await akaveBase.get(
       `/buckets/${bucketName}/files/${fileName}/download`,
@@ -155,12 +154,18 @@ export async function downloadFileFromBucket(
       }
     );
 
-    console.log(`downloadFileFromBucket - File downloaded: ${fileName}`);
-    fs.writeFileSync(`./${outputDir}/${fileName}`, response.data);
+    console.log(`File downloaded: ${fileName}`);
 
-    return `./${outputDir}/${fileName}`;
+    const blob = new Blob([response.data], {
+      type: response.headers["content-type"],
+    });
+
+    const imageUrl = URL.createObjectURL(blob);
+
+    return imageUrl;
   } catch (e) {
     const error = e as AxiosError;
     console.error(error.response ? error.response.data : error.message);
+    throw error;
   }
 }
