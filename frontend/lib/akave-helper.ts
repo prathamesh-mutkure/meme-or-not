@@ -1,11 +1,11 @@
 import axios, { AxiosError } from "axios";
 import FormData from "form-data";
-import fs from "fs";
+// import fs from "fs";
 
 // TODO: Figure out fs (backend)
 // TODO: Add types and public node address
 
-const akaveBase = axios.create({
+export const akaveBase = axios.create({
   baseURL: "http://localhost:8000",
 });
 
@@ -16,7 +16,14 @@ export async function createBucket(bucketName: string) {
     const response = await akaveBase.post("/buckets", { bucketName });
     console.log("createBucket", response.data);
 
-    return response.data;
+    return response.data as {
+      success: true;
+      data: {
+        ID: string;
+        CreatedAt: string;
+        transactionHash: string;
+      };
+    };
   } catch (e) {
     const error = e as AxiosError;
 
@@ -29,7 +36,14 @@ export async function listBuckets() {
     const response = await akaveBase.get("/buckets");
     console.log("listBuckets", response.data);
 
-    return response.data;
+    return response.data as {
+      success: true;
+      data: {
+        ID: string;
+        Name: string;
+        CreatedAt: string;
+      }[];
+    };
   } catch (e) {
     const error = e as AxiosError;
 
@@ -42,7 +56,14 @@ export async function viewBucketDetails(bucketName: string) {
     const response = await akaveBase.get(`/buckets/${bucketName}`);
     console.log("viewBucketDetails", response.data);
 
-    return response.data;
+    return response.data as {
+      success: true;
+      data: {
+        ID: string;
+        CreatedAt: string;
+        transactionHash: string;
+      };
+    };
   } catch (e) {
     const error = e as AxiosError;
 
@@ -80,23 +101,28 @@ export async function getFileMetadata(bucketName: string, filename: string) {
   }
 }
 
-export async function uploadFileToBucket(bucketName: string, filePath: string) {
-  const form = new FormData();
-  form.append("file", fs.createReadStream(filePath));
+export async function uploadFileToBucket(bucketName: string, file: File) {
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("bucketName", bucketName);
 
   try {
-    const response = await akaveBase.post(
-      `/buckets/${bucketName}/files`,
-      form,
-      {
-        headers: form.getHeaders(),
-      }
-    );
+    const response = await axios.post("/api/akave/", formData);
 
-    console.log("uploadFileToBucket", response.data);
-  } catch (e) {
-    const error = e as AxiosError;
-    console.error(error.response ? error.response.data : error.message);
+    const data = response.data as {
+      success: true;
+      data: {
+        Name: string;
+        RootCID: string;
+      };
+    };
+
+    console.log("Upload successful:", data);
+
+    return data;
+  } catch (error) {
+    console.error("Upload error:", error);
+    throw error;
   }
 }
 
