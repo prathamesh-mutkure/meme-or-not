@@ -118,17 +118,10 @@ export function TimelineDemo() {
           <motion.h2 
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-2xl md:text-3xl font-bold text-white mb-4"
+            className="text-4xl md:text-3xl font-bold text-white mb-4"
           >
-            Roadmap to Revolution
+            Roadmap
           </motion.h2>
-          <motion.p 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-neutral-300 text-sm md:text-base"
-          >
-            Our journey to transform meme creation into a rewarding ecosystem
-          </motion.p>
         </div>
         <Timeline data={data} />
       </div>
