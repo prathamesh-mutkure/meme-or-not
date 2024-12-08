@@ -23,7 +23,7 @@ const MemeGallery = () => {
       setLoading(true);
       try {
         const memes = await getAllMemes();
-        
+
         if (memes.data) {
           // const memesWithImages = await Promise.all(
           //   memes.data.map(async (meme) => {
@@ -83,7 +83,12 @@ const MemeGallery = () => {
                 transition={{ duration: 0.2 }}
               >
                 <div className="aspect-square bg-gray-800 rounded-lg overflow-hidden">
-                  <LazyBlobImage cid={meme.cid} type={"wolrus"} className="w-full h-full object-cover"/>
+                  <LazyBlobImage
+                    cid={meme.cid}
+                    // type={meme.type ?? "akave"}
+                    type={"akave"}
+                    className="w-full h-full object-cover"
+                  />
                 </div>
               </motion.div>
             ))}

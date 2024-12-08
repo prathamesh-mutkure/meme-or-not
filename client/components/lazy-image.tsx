@@ -11,7 +11,7 @@ const LazyBlobImage = ({
   className = "",
 }: {
   cid: string;
-  type: "akave" | "wolrus";
+  type: "akave";
   className?: string;
 }) => {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
@@ -24,13 +24,7 @@ const LazyBlobImage = ({
         setLoading(true);
         setError(null);
 
-        if (type === "wolrus") {
-          const blob = await downloadBlob(cid);
-          console.log(blob);
-          console.log(URL.createObjectURL(blob));
-
-          setImageUrl(URL.createObjectURL(blob));
-        } else {
+        if (type == "akave") {
           const url = await downloadAndDisplayFile("test", cid);
           setImageUrl(url);
         }

@@ -57,7 +57,6 @@ const MemeView = () => {
 
         setMemes(memesData.data.reverse());
 
-
         // Load images sequentially to prevent race conditions
         // const loadedMemes = await Promise.all(
         //   memesData.data.map(async (meme) => {
@@ -106,7 +105,7 @@ const MemeView = () => {
           return;
         }
 
-        setError( "Failed to load memes");
+        setError("Failed to load memes");
         console.error("Error loading memes:", error);
       } finally {
         if (isMounted) {
@@ -150,7 +149,7 @@ const MemeView = () => {
     setTimeout(() => setShowReaction(null), 1000);
 
     const mm = memes[currentIndex];
-    
+
     await investInTemplate(address as string, parseInt(mm.memeTemplate), true);
 
     nextMeme();
@@ -315,7 +314,11 @@ const MemeView = () => {
                 className="w-full h-full object-contain rounded-xl"
               /> */}
 
-            <LazyBlobImage cid={memes[currentIndex].cid} type={"wolrus"} className="w-full h-full object-contain rounded-xl"/>
+              <LazyBlobImage
+                cid={memes[currentIndex].cid}
+                type={memes[currentIndex].type ?? "akave"}
+                className="w-full h-full object-contain rounded-xl"
+              />
             </motion.div>
           </AnimatePresence>
         )}

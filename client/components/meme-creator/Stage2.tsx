@@ -8,8 +8,13 @@ import { createMeme, safeBase64ToFile, uploadImage } from "@/lib/utils";
 import { MemeSchema } from "@/true-network/schema";
 import { TrueApi } from "@truenetworkio/sdk";
 import { useAccount } from "wagmi";
-import { adjectives, animals, colors, uniqueNamesGenerator } from "unique-names-generator";
-import { storeFile } from "@/lib/walrus-helper";
+import {
+  adjectives,
+  animals,
+  colors,
+  uniqueNamesGenerator,
+} from "unique-names-generator";
+import { uploadFileToBucket } from "@/lib/akave-helper";
 
 interface Stage2Props {
   capturedImage: string | null;
@@ -67,24 +72,17 @@ const Stage2: React.FC<Stage2Props> = ({
       );
 
       try {
-
         const randomName = uniqueNamesGenerator({
           dictionaries: [adjectives, colors, animals],
-          separator: '-',
-          length: 3
+          separator: "-",
+          length: 3,
         });
 
         const fileToUpload = await safeBase64ToFile(memeDataUrl, randomName);
 
-        const res = await storeFile(fileToUpload);
-        let cid;
+        const res = await uploadFileToBucket("test", fileToUpload);
+        let cid = res.data.RootCID;
 
-        if ('alreadyCertified' in res) {
-           cid = res.alreadyCertified.blobId;
-        } else {
-          cid = res.newlyCreated.blobObject.blobId;
-        }
-        
         if (!trueApi) {
           return;
         }
@@ -101,13 +99,13 @@ const Stage2: React.FC<Stage2Props> = ({
 
         if (!attestationHash) return;
 
-        // TODO: Handle Akave
+        // TODO: Handle Corner Cases
         await createMeme({
           cid: cid,
           isTemplate: false,
           memeTemplate: memeTemplate.toString(),
           attestationHash: attestationHash,
-          type: "walrus",
+          type: "akave",
         });
 
         console.log("Meme uploaded to IPFS:", res);
