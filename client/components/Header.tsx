@@ -5,6 +5,7 @@ import { useAccount, useDisconnect, useSwitchChain } from "wagmi";
 import { LogOut, Plus } from "lucide-react";
 import { MetaMaskButton } from "@metamask/sdk-react-ui";
 import { giveGas } from "@/lib/utils";
+import { useRouter } from "next/router";
 
 // MobileNav component remains largely the same
 const MobileNav: React.FC<{
@@ -15,7 +16,7 @@ const MobileNav: React.FC<{
   return (
     <div className="fixed inset-0 bg-background z-40">
       <div className="p-4 flex justify-between items-center border-b">
-        <h1 className="text-2xl font-bold">MemeOrNot</h1>
+        <h1 className="text-2xl font-bold" onClick={() => window.location.href = '/'} >MemeOrNot</h1>
       </div>
     </div>
   );
@@ -26,6 +27,7 @@ const Header: React.FC = () => {
   const { address, isConnected } = useAccount();
   const { disconnect } = useDisconnect();
   const { chains, switchChain } = useSwitchChain();
+
 
   const addChain = async () => {
     if (chains) {
@@ -65,11 +67,11 @@ const Header: React.FC = () => {
       <div className="max-w-7xl mx-auto flex justify-between items-center">
         {/* Logo and Desktop Navigation */}
         <div className="hidden lg:flex items-center gap-8">
-          <h1 className="text-2xl font-bold">MemeOrNot</h1>
+          <h1 className="text-2xl font-bold" onClick={() => window.location.href = '/'}>MemeOrNot</h1>
         </div>
 
         {/* Mobile Logo (centered) */}
-        <h1 className="text-2xl font-bold lg:hidden">MemeOrNot</h1>
+        <h1 className="text-2xl font-bold lg:hidden" onClick={() => window.location.href = '/'}>MemeOrNot</h1>
 
         {/* Wallet Controls */}
         <div className="flex items-center gap-2 sm:gap-4 justify-center">

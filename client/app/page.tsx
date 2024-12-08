@@ -29,8 +29,6 @@ const Page = () => {
           {/* Spline container */}
           <div className="w-full">
             <Spline
-              width={428}
-              height={926}
               scene={`https://prod.spline.design/${process.env.NEXT_PUBLIC_SPLINE}/scene.splinecode`}
             />
           </div>
