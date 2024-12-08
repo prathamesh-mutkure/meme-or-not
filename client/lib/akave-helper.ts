@@ -6,7 +6,7 @@ import FormData from "form-data";
 // TODO: Add types and public node address
 
 export const akaveBase = axios.create({
-  baseURL: "http://localhost:8000",
+  baseURL: process.env.AKAVE_NODE_URL ?? "http://localhost:8000",
 });
 
 /* Bucket Operations */
