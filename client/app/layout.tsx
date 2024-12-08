@@ -76,7 +76,7 @@ export default function RootLayout({
               </p>
               <div className="w-48 h-48 relative mx-auto border border-border rounded-lg overflow-hidden">
                 <Image
-                  src="/Website.png"
+                  src="/memeornot.png"
                   alt="QR Code"
                   fill
                   className="object-cover"

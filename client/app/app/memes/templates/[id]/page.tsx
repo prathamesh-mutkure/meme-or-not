@@ -55,7 +55,7 @@ const MemeView = () => {
           throw new Error("No memes found");
         }
 
-        setMemes(memesData.data);
+        setMemes(memesData.data.reverse());
 
 
         // Load images sequentially to prevent race conditions
@@ -309,11 +309,11 @@ const MemeView = () => {
               onDragEnd={handleDragEnd}
               className="absolute w-full h-full rounded-xl shadow-lg"
             >
-              <img
+              {/* <img
                 src={memes[currentIndex]?.image}
                 alt="Meme"
                 className="w-full h-full object-contain rounded-xl"
-              />
+              /> */}
 
             <LazyBlobImage cid={memes[currentIndex].cid} type={"wolrus"} className="w-full h-full object-contain rounded-xl"/>
             </motion.div>
