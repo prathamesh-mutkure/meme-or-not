@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState, useEffect } from "react";
 import { Loader2 } from "lucide-react";
 import { downloadBlob } from "@/lib/walrus-helper";
@@ -17,9 +19,6 @@ const LazyBlobImage = ({
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    let mounted = true;
-    let objectUrl = null;
-
     const fetchImage = async () => {
       try {
         setLoading(true);
@@ -29,33 +28,24 @@ const LazyBlobImage = ({
           const blob = await downloadBlob(cid);
           console.log(blob);
           console.log(URL.createObjectURL(blob));
-          
-          
+
           setImageUrl(URL.createObjectURL(blob));
         } else {
           const url = await downloadAndDisplayFile("test", cid);
           setImageUrl(url);
         }
-
-        if (mounted) {
-          setImageUrl(objectUrl);
-          setLoading(false);
-        }
       } catch (err: any) {
-        if (mounted) {
-          setError(err?.message ?? "An error occurred");
-          setLoading(false);
-        }
+        setError(err?.message ?? "An error occurred");
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchImage();
 
-    // Cleanup function
     return () => {
-      mounted = false;
-      if (objectUrl) {
-        URL.revokeObjectURL(objectUrl);
+      if (imageUrl) {
+        URL.revokeObjectURL(imageUrl);
       }
     };
   }, [cid, type]);
@@ -80,7 +70,7 @@ const LazyBlobImage = ({
     <img
       src={imageUrl!}
       alt={`Content for ${cid}`}
-      className={`max-w-full h-auto ${className}`}
+      className={`max-w-full h-auto object-contain ${className}`}
     />
   );
 };
