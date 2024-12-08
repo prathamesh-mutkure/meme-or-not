@@ -83,12 +83,6 @@ const MemeGallery = () => {
                 transition={{ duration: 0.2 }}
               >
                 <div className="aspect-square bg-gray-800 rounded-lg overflow-hidden">
-                  {/* <img
-                    src={meme.image}
-                    alt={`meme`}
-                    className="w-full h-full object-cover"
-                    crossOrigin="anonymous"
-                  /> */}
                   <LazyBlobImage cid={meme.cid} type={"wolrus"} className="w-full h-full object-cover"/>
                 </div>
               </motion.div>

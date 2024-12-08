@@ -13,6 +13,7 @@ import {
 import { MemeTemplate } from "@/lib/memes";
 import { getAllMemes, investInTemplate } from "@/lib/utils";
 import { useAccount } from "wagmi";
+import LazyBlobImage from "@/components/lazy-image";
 
 const MemeView = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -54,47 +55,50 @@ const MemeView = () => {
           throw new Error("No memes found");
         }
 
+        setMemes(memesData.data);
+
+
         // Load images sequentially to prevent race conditions
-        const loadedMemes = await Promise.all(
-          memesData.data.map(async (meme) => {
-            try {
-              const response = await fetch(
-                `https://gateway.lighthouse.storage/ipfs/${meme.cid}`,
-                { signal: abortController.signal }
-              );
+        // const loadedMemes = await Promise.all(
+        //   memesData.data.map(async (meme) => {
+        //     try {
+        //       const response = await fetch(
+        //         `https://gateway.lighthouse.storage/ipfs/${meme.cid}`,
+        //         { signal: abortController.signal }
+        //       );
 
-              if (!response.ok) {
-                throw new Error(`Failed to load meme: ${response.statusText}`);
-              }
+        //       if (!response.ok) {
+        //         throw new Error(`Failed to load meme: ${response.statusText}`);
+        //       }
 
-              const imageData = await response.text();
-              return {
-                ...meme,
-                image: `data:image/png;base64,${imageData}`,
-              };
-            } catch (error) {
-              if (error instanceof Error && error.name === "AbortError") {
-                throw error; // Rethrow if it's an AbortError
-              }
-              // Handle other errors and return the meme without the image
-              return {
-                ...meme,
-                image: null,
-              };
-            }
-          })
-        );
+        //       const imageData = await response.text();
+        //       return {
+        //         ...meme,
+        //         image: `data:image/png;base64,${imageData}`,
+        //       };
+        //     } catch (error) {
+        //       if (error instanceof Error && error.name === "AbortError") {
+        //         throw error; // Rethrow if it's an AbortError
+        //       }
+        //       // Handle other errors and return the meme without the image
+        //       return {
+        //         ...meme,
+        //         image: null,
+        //       };
+        //     }
+        //   })
+        // );
 
-        if (!isMounted) return;
+        // if (!isMounted) return;
 
-        // Filter out memes with failed image loads
-        const validMemes = loadedMemes.filter((meme) => meme.image !== null);
+        // // Filter out memes with failed image loads
+        // const validMemes = loadedMemes.filter((meme) => meme.image !== null);
 
-        if (validMemes.length === 0) {
-          throw new Error("No valid memes could be loaded");
-        }
+        // if (validMemes.length === 0) {
+        //   throw new Error("No valid memes could be loaded");
+        // }
 
-        setMemes(validMemes);
+        // setMemes(validMemes);
       } catch (error) {
         if (!isMounted) return;
 
@@ -310,6 +314,8 @@ const MemeView = () => {
                 alt="Meme"
                 className="w-full h-full object-contain rounded-xl"
               />
+
+            <LazyBlobImage cid={memes[currentIndex].cid} type={"wolrus"} className="w-full h-full object-contain rounded-xl"/>
             </motion.div>
           </AnimatePresence>
         )}
