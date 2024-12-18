@@ -1,10 +1,9 @@
-import { configureChains } from '@metamask/sdk-react-ui';
 import { http, createConfig } from 'wagmi'
-import { baseSepolia } from 'wagmi/chains'
+import { mantleSepoliaTestnet } from 'wagmi/chains'
 
 export const config = createConfig({
-  chains: [baseSepolia],
+  chains: [mantleSepoliaTestnet],
   transports: {
-    [baseSepolia.id]: http(),
+    [mantleSepoliaTestnet.id]: http(),
   },
 });

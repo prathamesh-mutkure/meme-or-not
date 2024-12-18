@@ -4,12 +4,10 @@ import { TextBox } from "./types";
 import { DraggableText } from "./DraggableText";
 import { TextControl } from "./TextControl";
 import { generateMemeCanvas } from "./helper";
-import { createMeme, safeBase64ToFile, uploadImage } from "@/lib/utils";
+import { createMeme, uploadImage } from "@/lib/utils";
 import { MemeSchema } from "@/true-network/schema";
 import { TrueApi } from "@truenetworkio/sdk";
 import { useAccount } from "wagmi";
-import { adjectives, animals, colors, uniqueNamesGenerator } from "unique-names-generator";
-import { storeFile } from "@/lib/walrus-helper";
 
 interface Stage2Props {
   capturedImage: string | null;
@@ -67,50 +65,14 @@ const Stage2: React.FC<Stage2Props> = ({
       );
 
       try {
+        const cid = await uploadImage(memeDataUrl.replace(/^data:image\/\w+;base64,/, ""));
 
-        const randomName = uniqueNamesGenerator({
-          dictionaries: [adjectives, colors, animals],
-          separator: '-',
-          length: 3
-        });
-
-        const fileToUpload = await safeBase64ToFile(memeDataUrl, randomName);
-
-        const res = await storeFile(fileToUpload);
-        let cid;
-
-        if ('alreadyCertified' in res) {
-           cid = res.alreadyCertified.blobId;
-        } else {
-          cid = res.newlyCreated.blobObject.blobId;
-        }
-        
-        if (!trueApi) {
-          return;
-        }
-
-        const attestationHash = await MemeSchema.attest(
-          trueApi,
-          account.address as string,
-          {
-            cid: cid,
-            isTemplate: false,
-            memeTemplate: memeTemplate,
-          }
-        );
-
-        if (!attestationHash) return;
-
-        // TODO: Handle Akave
         await createMeme({
+          address: account.address as string,
           cid: cid,
-          isTemplate: false,
-          memeTemplate: memeTemplate.toString(),
-          attestationHash: attestationHash,
-          type: "walrus",
+          templateId: memeTemplate.toString()
         });
 
-        console.log("Meme uploaded to IPFS:", res);
       } catch (error) {
         console.error("Error uploading to IPFS:", error);
       }

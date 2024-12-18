@@ -55,40 +55,40 @@ export default function RootLayout({
   }, []);
 
   // Show nothing while checking screen size
-  if (isMobileView === null) {
-    return null;
-  }
+  // if (isMobileView === null) {
+  //   return null;
+  // }
 
   // Desktop view with QR code
-  if (!isMobileView) {
-    return (
-      <html lang="en">
-        <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-          <div className="min-h-screen flex items-center justify-center bg-background p-4">
-            <div className="max-w-md text-center space-y-4">
-              <FloatingMemes />
-              <h1 className="text-2xl font-bold text-foreground">
-                Mobile Only App
-              </h1>
-              <p className="text-muted-foreground">
-                This app is designed for mobile devices only. Please open it on
-                your phone or tablet with a screen width smaller than 440px.
-              </p>
-              <div className="w-48 h-48 relative mx-auto border border-border rounded-lg overflow-hidden">
-                <Image
-                  src="/memeornot.png"
-                  alt="QR Code"
-                  fill
-                  className="object-cover"
-                  priority
-                />
-              </div>
-            </div>
-          </div>
-        </body>
-      </html>
-    );
-  }
+  // if (!isMobileView) {
+  //   return (
+  //     <html lang="en">
+  //       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+  //         <div className="min-h-screen flex items-center justify-center bg-background p-4">
+  //           <div className="max-w-md text-center space-y-4">
+  //             <FloatingMemes />
+  //             <h1 className="text-2xl font-bold text-foreground">
+  //               Mobile Only App
+  //             </h1>
+  //             <p className="text-muted-foreground">
+  //               This app is designed for mobile devices only. Please open it on
+  //               your phone or tablet with a screen width smaller than 440px.
+  //             </p>
+  //             <div className="w-48 h-48 relative mx-auto border border-border rounded-lg overflow-hidden">
+  //               <Image
+  //                 src="/FunnyOrFud.png"
+  //                 alt="QR Code"
+  //                 fill
+  //                 className="object-cover"
+  //                 priority
+  //               />
+  //             </div>
+  //           </div>
+  //         </div>
+  //       </body>
+  //     </html>
+  //   );
+  // }
 
   // Mobile view
   return (

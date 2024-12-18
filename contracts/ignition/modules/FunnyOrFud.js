@@ -3,8 +3,8 @@
 
 const { buildModule } = require("@nomicfoundation/hardhat-ignition/modules");
 
-module.exports = buildModule("MemeOrNot", (m) => {
-  const MemeOrNot = m.contract("MemeOrNot");
+module.exports = buildModule("FunnyOrFud", (m) => {
+  const FunnyOrFud = m.contract("FunnyOrFud");
 
-  return { MemeOrNot };
+  return { FunnyOrFud };
 });

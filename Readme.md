@@ -1,4 +1,4 @@
-# MemeOrNot
+# FunnyOrFud
 
 A opinion market for memes! Create templates, create memes, and, give your opinions on them on our platform, and take part in mutual trades between peers.
 
@@ -10,7 +10,7 @@ Meme coins this, meme coins that when was the last time meme coins were actually
 Through the hot topic of memes, and, coins in the web3 space I want to solve the problem of rug pulls, no real community, and most of all cater to the degen -meme community. The problem with the current meme platforms like img-flip, 9 gag, pump.fun are that they aren't incentivizing creative individuals and risk-takers enough.  
 
 ### ABOUT IT
-MemeOrNot lies at the intersection of the current user market - An for-all platform with meme templates, meme creation, an editor, the incentive for users, and validation of humor all in one place. 
+FunnyOrFud lies at the intersection of the current user market - An for-all platform with meme templates, meme creation, an editor, the incentive for users, and validation of humor all in one place. 
 
 ### USERS
 It caters to three types of people in the community:

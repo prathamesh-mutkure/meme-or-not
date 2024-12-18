@@ -1,3 +1,3 @@
-import ABI from "../contractData/MemeOrNot.json";
-export const DEPLOYED_CONTRACT = '0x0C4dcACda4eeedA552959EB71b5fAd708914fe60';
+import ABI from "../contractData/FunnyOrFud.json";
+export const DEPLOYED_CONTRACT = '0x8ed88f91D19fBE8bEfBB07Eb7625AcA694A780C0';
 export const CONTRACT_ABI = ABI.abi;

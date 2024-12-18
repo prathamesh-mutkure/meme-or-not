@@ -8,7 +8,6 @@ import {
   useReadContract,
   useReadContracts,
 } from "wagmi";
-import { Template } from "./types";
 import { CONTRACT_ABI, DEPLOYED_CONTRACT } from "@/lib/ethers";
 import { TrueApi } from "@truenetworkio/sdk";
 import { uploadImage } from "@/lib/utils";
@@ -24,7 +23,6 @@ interface Stage1Props {
   setmemeTemplate: (state: number) => void;
 }
 
-
 const Stage1: React.FC<Stage1Props> = ({
   setCapturedImage,
   capturedImage,
@@ -39,7 +37,9 @@ const Stage1: React.FC<Stage1Props> = ({
   const [base64Image, setBase64Image] = useState<string | null>(null);
   const [ipfsCid, setIpfsCid] = useState<string | null>(null);
   const [isUploadingToIpfs, setIsUploadingToIpfs] = useState(false);
-  const [templates, setTemplates] = useState<[string, bigint, bigint, bigint, bigint, boolean, string, string][]>([]);
+  const [templates, setTemplates] = useState<
+    [string, bigint, bigint, bigint, bigint, boolean, string, string][]
+  >([]);
 
   const { data: hash, writeContract, error } = useWriteContract();
   const { isLoading: isConfirmingMarket, status: MarketCreationStatus } =
@@ -75,7 +75,16 @@ const Stage1: React.FC<Stage1Props> = ({
 
       for (const temp of MemeTemplates) {
         // Type assertion for the result
-        const result = temp.result as [string, bigint, bigint, bigint, bigint, boolean, string, string];
+        const result = temp.result as [
+          string,
+          bigint,
+          bigint,
+          bigint,
+          bigint,
+          boolean,
+          string,
+          string
+        ];
         const data = await fetch(
           `https://gateway.lighthouse.storage/ipfs/${result[6]}`
         );
@@ -202,7 +211,10 @@ const Stage1: React.FC<Stage1Props> = ({
     }
   };
 
-  const handleTemplateSelection = (template: [string, bigint, bigint, bigint, bigint, boolean, string, string], index: number) => {
+  const handleTemplateSelection = (
+    template: [string, bigint, bigint, bigint, bigint, boolean, string, string],
+    index: number
+  ) => {
     // For templates, we'll use the template URL directly
     setSelectedImage(null);
     setBase64Image(null);

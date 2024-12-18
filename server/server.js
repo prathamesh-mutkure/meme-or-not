@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const { Meme, GasModel } = require("./model");
 const { ethers, parseEther, Contract } = require("ethers");
-const CONTRACT = require("./MemeOrNot.json");
+const CONTRACT = require("./FunnyOrFud.json");
 require("dotenv").config();
 
 const app = express();
@@ -23,7 +23,7 @@ mongoose
 const provider = new ethers.JsonRpcProvider(process.env.RPC_URL); // Add your RPC URL to .env
 const relayerWallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider); // Add your private key to .env
 
-const contractAddress = "0x0C4dcACda4eeedA552959EB71b5fAd708914fe60";
+const contractAddress = "0x8ed88f91D19fBE8bEfBB07Eb7625AcA694A780C0";
 const contractABI = CONTRACT.abi;
 
 // Create - GET Health Check
@@ -83,12 +83,50 @@ app.post("/api/relay", async (req, res) => {
 app.post("/api/memes", async (req, res) => {
   try {
     console.log("Fetching memes");
-    
+
     const meme = new Meme(req.body);
     await meme.save();
     res.status(201).json(meme);
   } catch (error) {
     res.status(400).json({ message: error.message });
+  }
+});
+
+app.post("/api/meme", async (req, res) => {
+  const { address, cid, templateId } = req.body;
+
+  console.log(req.body);
+  
+  if (!address || cid === undefined) {
+    return res.status(400).json({ message: "Missing required parameters" });
+  }
+
+  try {
+    // Initialize the contract instance
+    const contract = new Contract(contractAddress, contractABI, relayerWallet);
+
+    const gasLimit = await contract.createMeme.estimateGas(
+      address,
+      cid,
+      templateId
+    );
+
+    // Send the transaction
+    const txResponse = await contract.createMeme(address, cid, templateId, {
+      gasLimit: gasLimit,
+    });
+
+    console.log("Transaction sent:", txResponse.hash);
+
+    // /
+    res.json({
+      message: "Meme created successfully",
+    });
+  } catch (error) {
+    console.error("Error relaying:", error);
+    res
+      .status(500)
+      .json({ message: "Failed to relay", error: error.message });
   }
 });
 
@@ -155,7 +193,7 @@ app.get("/api/faucet/:address", async (req, res) => {
     res.status(200).json({ message: "Already given some testnet tokens" });
   } catch (error) {
     console.log(error);
-    
+
     res.status(500).json({ message: error.message });
   }
 });

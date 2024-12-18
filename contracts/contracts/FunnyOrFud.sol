@@ -1,7 +1,13 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-contract MemeOrNot {
+contract FunnyOrFud {
+    struct Meme {
+        address creator;
+        string cid;
+        uint256 memeTemplate;
+    }
+
     struct Market {
         address creator;
         uint256 endTime;
@@ -14,6 +20,7 @@ contract MemeOrNot {
         mapping(address => bool) hasVoted;
         address[] yesVoters;
         address[] noVoters;
+        Meme[] memes;
     }
 
     uint256 public marketCount;
@@ -27,6 +34,9 @@ contract MemeOrNot {
         uint256 endTime,
         string metadata
     );
+
+    event MemeCreated(uint256 templateId);
+
     event VoteCast(uint256 indexed marketId, address indexed voter, bool vote);
     event RewardsDistributed(
         uint256 indexed marketId,
@@ -48,6 +58,12 @@ contract MemeOrNot {
         return marketCount;
     }
 
+    function getMarketMemes(
+        uint256 marketId
+    ) external view marketExists(marketId) returns (Meme[] memory) {
+        return markets[marketId].memes;
+    }
+
     function createMarket(string memory metadata) external {
         uint256 endTime = block.timestamp + 6 hours;
 
@@ -62,7 +78,21 @@ contract MemeOrNot {
         marketCount++;
     }
 
-    function getMarket(uint256 marketId)
+    function createMeme(
+        address creator,
+        string memory cid,
+        uint256 templateId
+    ) external marketExists(templateId) {
+        Meme memory newM = Meme(creator, cid, templateId);
+
+        markets[templateId].memes.push(newM);
+
+        emit MemeCreated(templateId);
+    }
+
+    function getMarket(
+        uint256 marketId
+    )
         external
         view
         marketExists(marketId)
@@ -73,7 +103,8 @@ contract MemeOrNot {
             uint256 noVotes,
             uint256 totalStaked,
             bool isActive,
-            string memory metadata
+            string memory metadata,
+            Meme[] memory memes
         )
     {
         Market storage market = markets[marketId];
@@ -84,16 +115,16 @@ contract MemeOrNot {
             market.noVotes,
             market.totalStaked,
             market.isActive,
-            market.metadata
+            market.metadata,
+            market.memes
         );
     }
 
-    function vote(address userAddress, uint256 marketId, bool voteYes)
-        external
-        payable
-        marketExists(marketId)
-        onlyActiveMarket(marketId)
-    {
+    function vote(
+        address userAddress,
+        uint256 marketId,
+        bool voteYes
+    ) external payable marketExists(marketId) onlyActiveMarket(marketId) {
         Market storage market = markets[marketId];
 
         require(msg.value == voteCost, "Incorrect voting fee");
@@ -114,11 +145,9 @@ contract MemeOrNot {
         emit VoteCast(marketId, userAddress, voteYes);
     }
 
-    function releaseRewards(uint256 marketId)
-        external
-        marketExists(marketId)
-        onlyActiveMarket(marketId)
-    {
+    function releaseRewards(
+        uint256 marketId
+    ) external marketExists(marketId) onlyActiveMarket(marketId) {
         Market storage market = markets[marketId];
 
         require(block.timestamp > market.endTime, "Market is still active");

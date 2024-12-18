@@ -34,42 +34,51 @@ const MinimalistFeatures = () => {
   ];
 
   return (
-    <div className="bg-gray-800 w-full max-w-6xl mx-auto px-4 py-20">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {features.map((feature, index) => (
-          <motion.div
-            key={index}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{
-              duration: 0.5,
-              delay: index * 0.2,
-              ease: "easeOut",
-            }}
-            className="relative group"
-          >
-            {/* Gradient Orb */}
-            <div className={`absolute -z-10 top-0 right-0 w-24 h-24 rounded-full blur-2xl opacity-0 group-hover:opacity-25 bg-gradient-to-br ${feature.gradient} to-transparent transition-opacity duration-500`} />
-            
-            {/* Card */}
-            <div className="h-full bg-gray-900/50 backdrop-blur-sm border border-gray-800 rounded-2xl p-6 hover:border-gray-700 transition-colors duration-300">
-              {/* Icon */}
-              <div className={`w-12 h-12 ${feature.iconBg} ${feature.iconColor} rounded-full flex items-center justify-center mb-6`}>
-                {feature.icon}
-              </div>
+    <section className="bg-gray-800 w-full">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+          {features.map((feature, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                duration: 0.5,
+                delay: index * 0.2,
+                ease: "easeOut",
+              }}
+              className="relative group h-full"
+            >
+              {/* Gradient Orb */}
+              <div 
+                className={`absolute -z-10 top-0 right-0 w-20 sm:w-24 h-20 sm:h-24 
+                  rounded-full blur-2xl opacity-0 group-hover:opacity-25 
+                  bg-gradient-to-br ${feature.gradient} to-transparent 
+                  transition-opacity duration-500`} 
+              />
+              
+              {/* Card */}
+              <div className="h-full bg-gray-900/50 backdrop-blur-sm border border-gray-800 
+                rounded-2xl p-4 sm:p-6 hover:border-gray-700 transition-colors duration-300">
+                {/* Icon */}
+                <div className={`w-10 h-10 sm:w-12 sm:h-12 ${feature.iconBg} ${feature.iconColor} 
+                  rounded-full flex items-center justify-center mb-4 sm:mb-6`}>
+                  {feature.icon}
+                </div>
 
-              {/* Content */}
-              <h3 className="text-xl font-medium text-white mb-3">
-                {feature.title}
-              </h3>
-              <p className="text-gray-400 text-sm leading-relaxed">
-                {feature.description}
-              </p>
-            </div>
-          </motion.div>
-        ))}
+                {/* Content */}
+                <h3 className="text-lg sm:text-xl font-medium text-white mb-2 sm:mb-3">
+                  {feature.title}
+                </h3>
+                <p className="text-sm text-gray-400 leading-relaxed">
+                  {feature.description}
+                </p>
+              </div>
+            </motion.div>
+          ))}
+        </div>
       </div>
-    </div>
+    </section>
   );
 };
 

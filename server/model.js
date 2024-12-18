@@ -6,16 +6,16 @@ const memeSchema = new mongoose.Schema({
   isTemplate: Boolean,
   memeTemplate: String,
   attestationHash: String,
-  type: String,
+  // type: String,
 });
 
-const Meme = mongoose.model("Meme", memeSchema);
+const Meme = mongoose.model("MantleMemes", memeSchema);
 
 const GasSchema = new mongoose.Schema({
   address: String
 });
 
-const GasModel = mongoose.model("GasSchmea", GasSchema);
+const GasModel = mongoose.model("MantleGasSchema", GasSchema);
 
 
 module.exports = { Meme, GasModel};

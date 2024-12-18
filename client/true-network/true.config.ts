@@ -21,7 +21,7 @@ export const config: TrueConfig = {
     secret: process.env.NEXT_PUBLIC_TRUE_NETWORK_SECRET_KEY ?? ''
   },
   issuer: {
-    name: 'MemeOrNot',
+    name: 'FunnyOrFud',
     hash: '0xfd316c937b924547625d7131099f463e4f19f6f6f87a6f4ffa1e6570139b5d26'
   },
   algorithm: {

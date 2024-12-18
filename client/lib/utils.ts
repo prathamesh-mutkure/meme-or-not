@@ -12,12 +12,9 @@ const API_ROUTE =
 
 // lib/api.ts
 interface MemeData {
+  address: string,
   cid: string;
-  isTemplate: Boolean;
-  memeTemplate: string;
-  attestationHash: string;
-  type: string;
-  // Add any other fields your Meme model requires
+  templateId: string
 }
 
 interface ApiResponse {
@@ -28,7 +25,7 @@ interface ApiResponse {
 
 export const createMeme = async (memeData: MemeData): Promise<ApiResponse> => {
   try {
-    const response = await fetch(`${API_ROUTE}/api/memes`, {
+    const response = await fetch(`${API_ROUTE}/api/meme`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
