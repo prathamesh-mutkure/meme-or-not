@@ -11,10 +11,16 @@ import {
   ArrowDown,
 } from "lucide-react";
 import { MemeTemplate } from "@/lib/memes";
-import { getAllMemes, investInTemplate } from "@/lib/utils";
-import { useAccount } from "wagmi";
+import { investInTemplate } from "@/lib/utils";
+import { useAccount, useReadContract } from "wagmi";
+import { useParams, useRouter } from "next/navigation";
+import { CONTRACT_ABI, DEPLOYED_CONTRACT } from "@/lib/ethers";
 
 const MemeView = () => {
+  const params = useParams();
+  const router = useRouter();
+  const templateId = params.id as string;
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(0);
   const [dragPosition, setDragPosition] = useState({ x: 0, y: 0 });
@@ -28,6 +34,13 @@ const MemeView = () => {
 
   const { address } = useAccount();
 
+  const { data: marketData } = useReadContract({
+    address: DEPLOYED_CONTRACT as `0x${string}`,
+    abi: CONTRACT_ABI,
+    functionName: "getMarket",
+    args: [BigInt(templateId)],
+  });
+
   // Handle instructions visibility
   useEffect(() => {
     const hasSeenInstructions = localStorage.getItem("hasSeenMemeInstructions");
@@ -36,7 +49,7 @@ const MemeView = () => {
     }
   }, []);
 
-  // Load memes with proper error handling and race condition prevention
+  // Load memes for specific template
   useEffect(() => {
     let isMounted = true;
     const abortController = new AbortController();
@@ -46,20 +59,20 @@ const MemeView = () => {
         setIsLoading(true);
         setError(null);
 
-        const memesData = await getAllMemes();
-
-        if (!isMounted) return;
-
-        if (!memesData.data || memesData.data.length === 0) {
-          throw new Error("No memes found");
+        if (!marketData) {
+          throw new Error("Market not found");
         }
 
-        // setMemes(memesData.data.reverse());
+        // Extract memes from market data
+        const marketMemes = marketData[7] as any[]; // The memes array from the market data
 
+        if (!marketMemes || marketMemes.length === 0) {
+          throw new Error("No memes found for this template");
+        }
 
         // Load images sequentially to prevent race conditions
         const loadedMemes = await Promise.all(
-          memesData.data.map(async (meme) => {
+          marketMemes.map(async (meme) => {
             try {
               const response = await fetch(
                 `https://gateway.lighthouse.storage/ipfs/${meme.cid}`,
@@ -74,15 +87,16 @@ const MemeView = () => {
               return {
                 ...meme,
                 image: `data:image/png;base64,${imageData}`,
+                memeTemplate: templateId,
               };
             } catch (error) {
               if (error instanceof Error && error.name === "AbortError") {
-                throw error; // Rethrow if it's an AbortError
+                throw error;
               }
-              // Handle other errors and return the meme without the image
               return {
                 ...meme,
                 image: null,
+                memeTemplate: templateId,
               };
             }
           })
@@ -97,7 +111,7 @@ const MemeView = () => {
           throw new Error("No valid memes could be loaded");
         }
 
-        setMemes(validMemes.reverse());
+        setMemes(validMemes);
       } catch (error) {
         if (!isMounted) return;
 
@@ -105,7 +119,9 @@ const MemeView = () => {
           return;
         }
 
-        setError( "Failed to load memes");
+        setError(
+          error instanceof Error ? error.message : "Failed to load memes"
+        );
         console.error("Error loading memes:", error);
       } finally {
         if (isMounted) {
@@ -120,7 +136,7 @@ const MemeView = () => {
       isMounted = false;
       abortController.abort();
     };
-  }, []);
+  }, [marketData, templateId]);
 
   const handleDrag = (event: any, info: PanInfo) => {
     setDragPosition({ x: info.offset.x, y: info.offset.y });
@@ -149,7 +165,6 @@ const MemeView = () => {
     setTimeout(() => setShowReaction(null), 1000);
 
     const mm = memes[currentIndex];
-    
     await investInTemplate(address as string, parseInt(mm.memeTemplate), true);
 
     nextMeme();
@@ -220,6 +235,14 @@ const MemeView = () => {
 
   return (
     <div className="bg-[hsl(220,10%,8%)] max-w-full h-[93vh] flex items-center justify-center p-4">
+      <button
+        onClick={() => router.back()}
+        className="absolute top-4 left-4 text-white hover:text-gray-300 flex items-center gap-2"
+      >
+        <ArrowLeft className="w-4 h-4" />
+        Back to Templates
+      </button>
+
       <div className="relative w-[400px] h-[60vh] overflow-hidden">
         {/* Loading State */}
         {isLoading && (
@@ -313,7 +336,6 @@ const MemeView = () => {
                 alt="Meme"
                 className="w-full h-full object-contain rounded-xl"
               />
-
             </motion.div>
           </AnimatePresence>
         )}
